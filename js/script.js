@@ -1,8 +1,11 @@
 class Validator {
     constructor() {
         this.validations = [
+            'data-required',
             'data-min-length',
             'data-max-length',
+            'data-email-validate',
+            'data-only-letters',
 
         ]
     }
@@ -64,16 +67,61 @@ class Validator {
 
     }
 
+    //método que valida o email
+    emailvalidate(input){
+        //email@email.com -> email@email.com.br
+        let re = /\S+@\S+\.\S+/;
+
+        let email = input.value;
+
+        let errorMessage = `Insira um e-mail no padrão exemplo -> eduardo@email.com`;
+        if (!re.test(email)){
+            this.printMessage(input, errorMessage);
+        }
+
+    }
+    //valida se o campo tiver apenas letras
+    onlyletters(input){
+
+        let re = /^[A-Za-z]+$/;
+
+        let inputValue = input.value;
+
+        let errorMessage = `Este campo não aceita números e nem caracteres especiais`;
+        if (!re.test(inputValue)) {
+            this.printMessage(input, errorMessage);
+
+        }
+
+
+
+    }
+
     //método para imprimir msg de erro na tela
 
     printMessage(input, msg) {
-        let template = document.querySelector('.error-validation').cloneNode(true);
-        template.textContent = msg;
+        let errorQty = input.parentNode.querySelector('.error-validation');
 
-        let inputParent = input.parentNode;
+        if(errorQty === null) {
+            let template = document.querySelector('.error-validation').cloneNode(true);
+            template.textContent = msg;
 
-        template.classList.remove('template');
-        inputParent.appendChild(template);
+            let inputParent = input.parentNode;
+
+            template.classList.remove('template');
+            inputParent.appendChild(template);
+            }
+
+        }    
+        // verifica se o input é requirido
+        required(input){
+            let inputValue = input.value;
+
+            if (inputValue === ''){
+                let errorMessage = `Este caompo é obrigatório`;
+
+                this.printMessage(input, errorMessage);
+            }
 
         }
         //limpa as validações da tela
